@@ -15,33 +15,35 @@
   box-shadow: none !important;
 }
 <template>
-  <v-app-bar color="primary" dark flat>
-    <v-toolbar-title><div style="padding-left: 24px;">My Dashboard</div></v-toolbar-title>
-    <v-spacer />
-    <v-select
-      v-model="selectedMonth"
-      :items="monthOptions"
-      label="Month"
-      variant="underlined"
-      style="max-width: 160px; margin-right: 32px;"
-      hide-details
-    />
+  <v-app-bar color="primary" dark flat class="dashboard-bar">
+    <div class="dashboard-bar-content">
+      <v-toolbar-title class="dashboard-title">My Dashboard</v-toolbar-title>
+      <v-spacer />
+      <v-select
+        v-model="selectedMonth"
+        :items="monthOptions"
+        label="Month"
+        variant="underlined"
+        class="dashboard-filter"
+        hide-details
+      />
+    </div>
   </v-app-bar>
 
   <v-container fluid class="py-6">
     <v-row class="mb-4" align="stretch">
       <v-col cols="12" sm="6" md="3" v-for="card in summaryCards" :key="card.label">
-        <v-card class="pa-4" elevation="2">
-          <div class="d-flex align-center justify-space-between">
-            <div>
-              <div class="text-h6 text-uppercase mb-1">{{ card.label }}</div>
-              <div class="text-h5 font-weight-bold">{{ card.value }}</div>
+        <v-card class="pa-4 card-summary" elevation="2">
+          <div class="card-header">
+            <div class="card-labels">
+              <div class="text-h6 text-uppercase mb-1 card-title">{{ card.label }}</div>
+              <div class="text-h5 font-weight-bold card-value">{{ card.value }}</div>
             </div>
             <v-icon :color="card.trend > 0 ? 'success' : card.trend < 0 ? 'error' : 'grey'">
               {{ card.trend > 0 ? 'mdi-arrow-up' : card.trend < 0 ? 'mdi-arrow-down' : 'mdi-minus' }}
             </v-icon>
           </div>
-          <div class="caption" :class="card.trend > 0 ? 'text-success' : card.trend < 0 ? 'text-error' : ''">
+          <div class="caption card-caption" :class="card.trend > 0 ? 'text-success' : card.trend < 0 ? 'text-error' : ''">
             {{ card.trend > 0 ? '+' : '' }}{{ card.trend }}% from prev
           </div>
         </v-card>
@@ -221,6 +223,11 @@ const barChartOptions = {
       grid: { color: 'rgba(255,255,255,0.05)' },
     },
   },
+  elements: {
+    bar: {
+      borderWidth: 0,
+    },
+  },
 }
 
 const lineChartOptions = {
@@ -238,6 +245,14 @@ const lineChartOptions = {
     x: {
       ticks: { color: '#b0b0b0' },
       grid: { color: 'rgba(255,255,255,0.05)' },
+    },
+  },
+  elements: {
+    line: {
+      borderWidth: 0,
+    },
+    point: {
+      borderWidth: 0,
     },
   },
 }
@@ -259,6 +274,14 @@ const areaChartOptions = {
       grid: { color: 'rgba(255,255,255,0.05)' },
     },
   },
+  elements: {
+    line: {
+      borderWidth: 0,
+    },
+    point: {
+      borderWidth: 0,
+    },
+  },
 }
 </script>
 
@@ -276,6 +299,56 @@ body, html, #app, .v-application {
 .v-app-bar {
   background: #18181c !important;
 }
+  .dashboard-bar {
+    padding: 0 !important;
+  }
+  .dashboard-bar-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 40px;
+    box-sizing: border-box;
+  }
+  .dashboard-title {
+    text-align: left !important;
+    min-width: 220px;
+    padding-left: 0 !important;
+  }
+  .dashboard-filter {
+    max-width: 160px;
+    margin-right: 0 !important;
+  }
+  .card-summary {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+  .card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .card-labels {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .card-title {
+    text-align: left !important;
+    width: 100%;
+  }
+  .card-value {
+    text-align: left !important;
+    width: 100%;
+  }
+  .card-caption {
+    text-align: center !important;
+    width: 100%;
+    margin-top: 8px;
+  }
 </style>
 .text-success {
   color: #00e676 !important; /* Accessible green on dark */
