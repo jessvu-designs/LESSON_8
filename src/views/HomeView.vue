@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import BarChart from '../components/BarChart.vue'
 import VisitorsLineChart from '../components/VisitorsLineChart.vue'
 import ConversionsAreaChart from '../components/ConversionsAreaChart.vue'
@@ -88,10 +88,7 @@ const months = [
 const monthOptions = ['All', ...months]
 const selectedMonth = ref('All')
 
-const filteredData = computed(() => {
-  if (selectedMonth.value === 'All') return metrics
-  return metrics.filter(m => m.month === selectedMonth.value)
-})
+
 
 function getPrevMonthIndex(idx: number) {
   return idx > 0 ? idx - 1 : null
