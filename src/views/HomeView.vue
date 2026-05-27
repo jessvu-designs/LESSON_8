@@ -1,375 +1,329 @@
-.v-container {
-  max-width: 100% !important;
-}
-.v-container, .v-container > * {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-.v-container:before,
-.v-container:after {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-.v-container, .v-row, .v-col {
-  background: transparent !important;
-  box-shadow: none !important;
-}
 <template>
-  <v-app-bar color="primary" dark flat class="dashboard-bar">
-    <div class="dashboard-bar-content">
-      <v-toolbar-title class="dashboard-title">My Dashboard</v-toolbar-title>
-      <v-spacer />
-      <v-select
-        v-model="selectedMonth"
-        :items="monthOptions"
-        label="Month"
-        variant="underlined"
-        class="dashboard-filter"
-        hide-details
-      />
+  <v-app-bar color="surface" flat class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <v-icon icon="mdi-ice-cream" size="24" class="brand-icon" />
+        <span class="brand-name">Sunny Scoops</span>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-date">{{ period.dateLabel }}</span>
+        <v-select
+          v-model="periodKey"
+          :items="periodOptions"
+          item-title="label"
+          item-value="value"
+          variant="outlined"
+          density="compact"
+          hide-details
+          class="period-filter"
+        />
+      </div>
     </div>
   </v-app-bar>
 
-  <v-container fluid class="py-6">
-    <v-row class="mb-4" align="stretch">
-      <v-col cols="12" sm="6" md="3" v-for="card in summaryCards" :key="card.label">
-        <v-card class="pa-4 card-summary" elevation="2">
-          <div class="card-header">
-            <div class="card-labels">
-              <div class="text-h6 text-uppercase mb-1 card-title">{{ card.label }}</div>
-              <div class="text-h5 font-weight-bold card-value">{{ card.value }}</div>
-            </div>
-            <v-icon :color="card.trend > 0 ? 'success' : card.trend < 0 ? 'error' : 'grey'">
-              {{ card.trend > 0 ? 'mdi-arrow-up' : card.trend < 0 ? 'mdi-arrow-down' : 'mdi-minus' }}
-            </v-icon>
+  <v-container fluid class="page">
+
+    <!-- Header -->
+    <header class="header">
+      <h1 class="page-title">Today at the Cart</h1>
+      <p class="page-sub">A quick look at sales, flavors, and what to prep next.</p>
+    </header>
+
+    <!-- KPIs -->
+    <v-row align="stretch" class="mb-10">
+      <v-col v-for="card in kpiCards" :key="card.label" cols="12" sm="6" md="3">
+        <v-card class="kpi" elevation="0">
+          <div class="kpi-label">{{ card.label }}</div>
+          <div class="kpi-value">{{ card.value }}</div>
+          <div v-if="card.trend !== null" class="kpi-trend" :class="trendClass(card.trend)">
+            <v-icon size="14" :icon="card.trend > 0 ? 'mdi-arrow-up' : 'mdi-arrow-down'" />
+            {{ card.trend > 0 ? '+' : '' }}{{ card.trend }}% {{ period.trendLabel }}
           </div>
-          <div class="caption card-caption" :class="card.trend > 0 ? 'text-success' : card.trend < 0 ? 'text-error' : ''">
-            {{ card.trend > 0 ? '+' : '' }}{{ card.trend }}% from prev
-          </div>
+          <div v-else class="kpi-trend kpi-trend--muted">{{ card.sub }}</div>
         </v-card>
       </v-col>
     </v-row>
 
-    <v-row class="mb-4" align="stretch">
-      <v-col cols="12" md="6">
-        <v-card class="pa-4" elevation="2">
-          <v-card-title class="pb-2">Monthly Revenue</v-card-title>
-          <BarChart :chart-data="revenueChartData" :chart-options="barChartOptions" />
-        </v-card>
-      </v-col>
-      <v-col cols="12" md="6">
-        <v-card class="pa-4" elevation="2">
-          <v-card-title class="pb-2">Visitors Over Time</v-card-title>
-          <VisitorsLineChart :chart-data="visitorsChartData" :chart-options="lineChartOptions" />
-        </v-card>
-      </v-col>
-    </v-row>
+    <!-- Main chart -->
+    <v-card class="panel mb-10" elevation="0">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">{{ chartTitle }}</h2>
+          <div class="panel-sub">{{ chartTotalLabel }}</div>
+        </div>
+        <v-btn-toggle
+          v-model="hourlyMetric"
+          mandatory density="compact" variant="outlined" color="primary"
+        >
+          <v-btn value="sales">Sales</v-btn>
+          <v-btn value="orders">Orders</v-btn>
+          <v-btn value="scoops">Scoops</v-btn>
+        </v-btn-toggle>
+      </div>
+      <div class="chart-wrap">
+        <BarChart :chart-data="hourlyChartData" :chart-options="barOptions" />
+      </div>
+    </v-card>
 
     <v-row>
-      <v-col cols="12">
-        <v-card class="pa-4" elevation="2">
-          <v-card-title class="pb-2">Conversions Trend</v-card-title>
-          <ConversionsAreaChart :chart-data="conversionsChartData" :chart-options="areaChartOptions" />
+      <!-- Top Flavors -->
+      <v-col cols="12" md="6">
+        <v-card class="panel" elevation="0">
+          <h2 class="panel-title mb-4">Top Flavors</h2>
+          <div class="flavor-list">
+            <div v-for="(f, i) in data.flavors" :key="f.name" class="flavor-row">
+              <span class="flavor-rank">{{ i + 1 }}</span>
+              <span class="flavor-name">{{ f.name }}</span>
+              <span class="flavor-scoops">{{ f.scoops }} scoops</span>
+              <span class="flavor-trend" :class="trendClass(f.trend)">
+                {{ f.trend > 0 ? '+' : '' }}{{ f.trend }}%
+              </span>
+            </div>
+          </div>
+        </v-card>
+      </v-col>
+
+      <!-- Needs Attention (today only) -->
+      <v-col v-if="periodKey === 'today'" cols="12" md="6">
+        <v-card class="panel" elevation="0">
+          <h2 class="panel-title mb-4">Needs Attention</h2>
+          <ul class="bullet-list">
+            <li v-for="a in data.alerts" :key="a">
+              <v-icon icon="mdi-alert-circle-outline" size="16" class="bullet-icon bullet-icon--alert" />
+              <span>{{ a }}</span>
+            </li>
+          </ul>
         </v-card>
       </v-col>
     </v-row>
+
+    <!-- Tomorrow's Prep (today only) -->
+    <v-card v-if="periodKey === 'today'" class="panel mt-6" elevation="0">
+      <h2 class="panel-title mb-4">Tomorrow's Prep</h2>
+      <ul class="bullet-list">
+        <li v-for="t in data.tomorrow" :key="t">
+          <v-icon icon="mdi-check-circle-outline" size="16" class="bullet-icon bullet-icon--ok" />
+          <span>{{ t }}</span>
+        </li>
+      </ul>
+    </v-card>
+
   </v-container>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import BarChart from '../components/BarChart.vue'
-import VisitorsLineChart from '../components/VisitorsLineChart.vue'
-import ConversionsAreaChart from '../components/ConversionsAreaChart.vue'
-import metrics from '../data/metrics.json'
+import data from '../data/metrics.json'
 
-const months = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+type PeriodKey = 'today' | 'month' | 'ytd'
+type Metric = 'sales' | 'orders' | 'scoops'
+
+const periodKey = ref<PeriodKey>('today')
+const hourlyMetric = ref<Metric>('sales')
+
+const periodOptions = [
+  { value: 'today', label: 'Today' },
+  { value: 'month', label: 'This Month' },
+  { value: 'ytd',   label: 'Year to Date' },
 ]
-const monthOptions = ['All', ...months]
-const selectedMonth = ref('All')
 
+const period = computed(() => data.periods[periodKey.value])
 
-
-function getPrevMonthIndex(idx: number) {
-  return idx > 0 ? idx - 1 : null
+function pctChange(curr: number, prev: number) {
+  if (!prev) return 0
+  return +(((curr - prev) / prev) * 100).toFixed(1)
 }
 
-const summaryCards = computed(() => {
-  if (selectedMonth.value === 'All') {
-    // Yearly totals/averages
-    const totalRevenue = metrics.reduce((a, b) => a + b.revenue, 0)
-    const totalVisitors = metrics.reduce((a, b) => a + b.visitors, 0)
-    const avgConversions = metrics.reduce((a, b) => a + b.conversions, 0) / metrics.length
-    const totalOrders = metrics.reduce((a, b) => a + b.orders, 0)
-    return [
-      { label: 'Revenue', value: `$${totalRevenue.toLocaleString()}`, trend: getTrend(metrics, 'revenue') },
-      { label: 'Visitors', value: totalVisitors.toLocaleString(), trend: getTrend(metrics, 'visitors') },
-      { label: 'Conversions', value: `${avgConversions.toFixed(2)}%`, trend: getTrend(metrics, 'conversions') },
-      { label: 'Orders', value: totalOrders.toLocaleString(), trend: getTrend(metrics, 'orders') },
-    ]
-  } else {
-    const idx = months.indexOf(selectedMonth.value)
-    const monthData = metrics[idx]
-    const prevIdx = getPrevMonthIndex(idx)
-    const prevData = prevIdx !== null ? metrics[prevIdx] : null
-    return [
-      {
-        label: 'Revenue',
-        value: `$${monthData.revenue.toLocaleString()}`,
-        trend: prevData ? percentChange(monthData.revenue, prevData.revenue) : 0
-      },
-      {
-        label: 'Visitors',
-        value: monthData.visitors.toLocaleString(),
-        trend: prevData ? percentChange(monthData.visitors, prevData.visitors) : 0
-      },
-      {
-        label: 'Conversions',
-        value: `${monthData.conversions.toFixed(2)}%`,
-        trend: prevData ? percentChange(monthData.conversions, prevData.conversions) : 0
-      },
-      {
-        label: 'Orders',
-        value: monthData.orders.toLocaleString(),
-        trend: prevData ? percentChange(monthData.orders, prevData.orders) : 0
-      },
-    ]
-  }
+const kpiCards = computed(() => {
+  const p = period.value
+  const k = p.kpis
+  return [
+    { label: 'Scoops Sold',         value: k.scoopsSold.value.toLocaleString(),         trend: pctChange(k.scoopsSold.value, k.scoopsSold.prev),     sub: '' },
+    { label: 'Total Sales',         value: '$' + k.totalSales.value.toLocaleString(),   trend: pctChange(k.totalSales.value, k.totalSales.prev),     sub: '' },
+    { label: 'Orders Served',       value: k.ordersServed.value.toLocaleString(),       trend: pctChange(k.ordersServed.value, k.ordersServed.prev), sub: '' },
+    { label: 'Best-Selling Flavor', value: p.topFlavor.name,                            trend: null as number | null,                                sub: `${p.topFlavor.scoops.toLocaleString()} scoops ${p.scoopLabelSuffix}` },
+  ]
 })
 
-function percentChange(current: number, prev: number) {
-  if (prev === 0) return 0
-  return +(((current - prev) / prev) * 100).toFixed(1)
-}
-
-function getTrend(data: any[], key: string) {
-  // Compare last month to previous month
-  if (data.length < 2) return 0
-  return percentChange(data[data.length - 1][key], data[data.length - 2][key])
-}
-
-// Chart Data
-const revenueChartData = computed(() => {
+const chartTitle = computed(() => {
+  const axis = period.value.chart.axisLabel
   return {
-    labels: selectedMonth.value === 'All' ? months : [selectedMonth.value],
-    datasets: [
-      {
-        label: 'Revenue',
-        backgroundColor: '#1976D2',
-        data: selectedMonth.value === 'All'
-          ? metrics.map(m => m.revenue)
-          : [metrics[months.indexOf(selectedMonth.value)].revenue],
-        borderRadius: 6,
-        maxBarThickness: 40,
-      },
-    ],
-  }
+    sales:  `Sales by ${axis}`,
+    orders: `Orders by ${axis}`,
+    scoops: `Scoops by ${axis}`,
+  }[hourlyMetric.value]
 })
 
-const visitorsChartData = computed(() => {
+const chartTotalLabel = computed(() => {
+  const series = (period.value.chart as any)[hourlyMetric.value] as number[]
+  const total = series.reduce((s, v) => s + v, 0)
+  const suffix = period.value.scoopLabelSuffix
+  if (hourlyMetric.value === 'sales')  return `Total ${suffix}: $${total.toLocaleString()}`
+  if (hourlyMetric.value === 'orders') return `Total ${suffix}: ${total.toLocaleString()} orders`
+  return `Total ${suffix}: ${total.toLocaleString()} scoops`
+})
+
+const hourlyChartData = computed(() => {
+  const c = period.value.chart
+  const key = hourlyMetric.value
   return {
-    labels: selectedMonth.value === 'All' ? months : [selectedMonth.value],
-    datasets: [
-      {
-        label: 'Visitors',
-        borderColor: '#43a047',
-        backgroundColor: 'rgba(67,160,71,0.15)',
-        data: selectedMonth.value === 'All'
-          ? metrics.map(m => m.visitors)
-          : [metrics[months.indexOf(selectedMonth.value)].visitors],
-        tension: 0.4,
-        fill: true,
-        pointRadius: 4,
-      },
-    ],
+    labels: c.labels,
+    datasets: [{
+      label: key,
+      data: (c as any)[key] as number[],
+      backgroundColor: '#e8a3b4',
+      borderColor: '#c63d5d',
+      borderRadius: 6,
+      maxBarThickness: 32,
+    }],
   }
 })
 
-const conversionsChartData = computed(() => {
-  return {
-    labels: selectedMonth.value === 'All' ? months : [selectedMonth.value],
-    datasets: [
-      {
-        label: 'Conversions (%)',
-        borderColor: '#ff9800',
-        backgroundColor: 'rgba(255,152,0,0.15)',
-        data: selectedMonth.value === 'All'
-          ? metrics.map(m => m.conversions)
-          : [metrics[months.indexOf(selectedMonth.value)].conversions],
-        tension: 0.4,
-        fill: true,
-        pointRadius: 4,
-      },
-    ],
-  }
-})
-
-const barChartOptions = {
+const barOptions = {
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: { display: false },
-    tooltip: { mode: 'index', intersect: false },
+    tooltip: {
+      backgroundColor: '#3a2418',
+      titleColor: '#fff7ee',
+      bodyColor: '#fff7ee',
+      padding: 10,
+    },
   },
   scales: {
-    y: {
-      beginAtZero: true,
-      ticks: { color: '#b0b0b0' },
-      grid: { color: 'rgba(255,255,255,0.05)' },
-    },
-    x: {
-      ticks: { color: '#b0b0b0' },
-      grid: { color: 'rgba(255,255,255,0.05)' },
-    },
-  },
-  elements: {
-    bar: {
-      borderWidth: 0,
-    },
+    y: { beginAtZero: true, ticks: { color: '#8a6e5d' }, grid: { color: 'rgba(138,110,93,0.10)' } },
+    x: { ticks: { color: '#8a6e5d' }, grid: { display: false } },
   },
 }
 
-const lineChartOptions = {
-  responsive: true,
-  plugins: {
-    legend: { display: false },
-    tooltip: { mode: 'index', intersect: false },
-  },
-  scales: {
-    y: {
-      beginAtZero: true,
-      ticks: { color: '#b0b0b0' },
-      grid: { color: 'rgba(255,255,255,0.05)' },
-    },
-    x: {
-      ticks: { color: '#b0b0b0' },
-      grid: { color: 'rgba(255,255,255,0.05)' },
-    },
-  },
-  elements: {
-    line: {
-      borderWidth: 0,
-    },
-    point: {
-      borderWidth: 0,
-    },
-  },
-}
-
-const areaChartOptions = {
-  responsive: true,
-  plugins: {
-    legend: { display: false },
-    tooltip: { mode: 'index', intersect: false },
-  },
-  scales: {
-    y: {
-      beginAtZero: true,
-      ticks: { color: '#b0b0b0' },
-      grid: { color: 'rgba(255,255,255,0.05)' },
-    },
-    x: {
-      ticks: { color: '#b0b0b0' },
-      grid: { color: 'rgba(255,255,255,0.05)' },
-    },
-  },
-  elements: {
-    line: {
-      borderWidth: 0,
-    },
-    point: {
-      borderWidth: 0,
-    },
-  },
+function trendClass(t: number) {
+  return t > 0 ? 'text-up' : t < 0 ? 'text-down' : 'text-flat'
 }
 </script>
 
 <style scoped>
-body, html, #app, .v-application {
-  background: #16171d !important;
+.page {
+  background: #fdf6ec;
+  min-height: 100vh;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 32px 64px;
+  color: #3a2418;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
-.v-application {
-  background: #16171d;
+
+/* Top bar */
+.topbar { background: #fdf6ec !important; border-bottom: 1px solid #efe2cf; }
+.topbar-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 32px;
 }
-.v-card {
-  background: #18181c;
-  color: #fff;
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-icon { color: #c63d5d; }
+.brand-name { font-weight: 600; font-size: 1rem; color: #3a2418; letter-spacing: 0.2px; }
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.topbar-date { font-size: 0.85rem; color: #8a6e5d; }
+.period-filter { max-width: 160px; min-width: 140px; }
+:deep(.period-filter .v-field) {
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 0.85rem;
 }
-.v-app-bar {
-  background: #18181c !important;
+
+/* Header */
+.header { margin-bottom: 32px; }
+.page-title {
+  font-family: 'Georgia', serif;
+  font-size: 2rem; font-weight: 600;
+  color: #3a2418; margin: 0 0 6px;
+  letter-spacing: -0.3px;
 }
-  .dashboard-bar {
-    padding: 0 !important;
-  }
-  .dashboard-bar-content {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 0 40px;
-    box-sizing: border-box;
-  }
-  .dashboard-title {
-    text-align: left !important;
-    min-width: 220px;
-    padding-left: 0 !important;
-  }
-  .dashboard-filter {
-    max-width: 160px;
-    margin-right: 0 !important;
-  }
-  .card-summary {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-  }
-  .card-header {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-    width: 100%;
-  }
-  .card-labels {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .card-title {
-    text-align: left !important;
-    width: 100%;
-  }
-  .card-value {
-    text-align: left !important;
-    width: 100%;
-  }
-  .card-caption {
-    text-align: center !important;
-    width: 100%;
-    margin-top: 8px;
-  }
+.page-sub { color: #8a6e5d; font-size: 0.95rem; margin: 0; }
+
+/* Cards (consistent) */
+.kpi, .panel {
+  background: #ffffff !important;
+  border: 1px solid #efe2cf;
+  border-radius: 12px !important;
+  padding: 20px 22px;
+  height: 100%;
+}
+.panel { padding: 24px; }
+
+/* KPI */
+.kpi { display: flex; flex-direction: column; gap: 6px; }
+.kpi-label {
+  font-size: 0.78rem; color: #8a6e5d;
+  letter-spacing: 0.04em; font-weight: 500;
+}
+.kpi-value {
+  font-family: 'Georgia', serif;
+  font-size: 1.75rem; font-weight: 600;
+  color: #3a2418; line-height: 1.15;
+}
+.kpi-trend {
+  font-size: 0.78rem; font-weight: 500;
+  display: flex; align-items: center; justify-content: center; gap: 3px;
+  margin-top: auto;
+  padding-top: 12px;
+  text-align: center;
+}
+.kpi-trend--muted { color: #8a6e5d; font-weight: 400; }
+panel-sub {
+  font-size: 0.8rem; color: #8a6e5d; margin-top: 4px;
+}
+.
+.text-up   { color: #2e8a5f; }
+.text-down { color: #b54a3b; }
+.text-flat { color: #8a6e5d; }
+
+/* Panel */
+.panel-head {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 16px; flex-wrap: wrap; margin-bottom: 20px;
+}
+.panel-title {
+  font-family: 'Georgia', serif;
+  font-size: 1.15rem; font-weight: 600;
+  color: #3a2418; margin: 0;
+}
+.chart-wrap { height: 300px; }
+
+/* Flavors */
+.flavor-list { display: flex; flex-direction: column; }
+.flavor-row {
+  display: grid;
+  grid-template-columns: 24px 1fr auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f4ead8;
+  font-size: 0.93rem;
+}
+.flavor-row:last-child { border-bottom: none; }
+.flavor-rank { color: #c9b394; font-weight: 600; font-size: 0.85rem; }
+.flavor-name { color: #3a2418; font-weight: 500; }
+.flavor-scoops { color: #8a6e5d; font-size: 0.85rem; }
+.flavor-trend { font-weight: 600; font-size: 0.82rem; min-width: 50px; text-align: right; }
+
+/* Bullet lists (alerts + prep) */
+.bullet-list {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.bullet-list li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 0.92rem; color: #4a3528; line-height: 1.45;
+}
+.bullet-icon { margin-top: 2px; flex-shrink: 0; }
+.bullet-icon--alert { color: #b54a3b; }
+.bullet-icon--ok { color: #2e8a5f; }
+
+@media (max-width: 600px) {
+  .page { padding: 24px 16px 48px; }
+  .topbar-inner { padding: 0 16px; }
+  .page-title { font-size: 1.6rem; }
+}
 </style>
-.text-success {
-  color: #00e676 !important; /* Accessible green on dark */
-}
-.text-error {
-  color: #ff1744 !important; /* Accessible red on dark */
-}
-.caption {
-  font-size: 0.95rem;
-  opacity: 0.85;
-  color: #e0e0e0;
-}
-.v-toolbar-title {
-  margin-left: 0 !important;
-  padding-left: 0 !important;
-  position: static !important;
-  text-align: left !important;
-}
-.v-container {
-  background: transparent !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}

@@ -64,7 +64,11 @@ body {
 
 body {
   margin: 0;
-  background: transparent;
+  background: #fdf6ec;
+}
+
+html, #app, .v-application, .v-application__wrap, .v-main {
+  background: #fdf6ec !important;
 }
 
 h1,

@@ -1,14 +1,79 @@
-[
-  { "month": "Jan", "revenue": 42000, "visitors": 3200, "conversions": 2.3, "orders": 74 },
-  { "month": "Feb", "revenue": 43500, "visitors": 3400, "conversions": 2.5, "orders": 80 },
-  { "month": "Mar", "revenue": 46000, "visitors": 4100, "conversions": 2.7, "orders": 98 },
-  { "month": "Apr", "revenue": 48000, "visitors": 4700, "conversions": 3.1, "orders": 120 },
-  { "month": "May", "revenue": 51000, "visitors": 5300, "conversions": 3.4, "orders": 140 },
-  { "month": "Jun", "revenue": 56000, "visitors": 6200, "conversions": 3.7, "orders": 170 },
-  { "month": "Jul", "revenue": 61000, "visitors": 7000, "conversions": 4.1, "orders": 200 },
-  { "month": "Aug", "revenue": 65000, "visitors": 6900, "conversions": 4.0, "orders": 195 },
-  { "month": "Sep", "revenue": 67000, "visitors": 6100, "conversions": 3.8, "orders": 170 },
-  { "month": "Oct", "revenue": 71000, "visitors": 5400, "conversions": 3.5, "orders": 150 },
-  { "month": "Nov", "revenue": 76000, "visitors": 4800, "conversions": 3.2, "orders": 130 },
-  { "month": "Dec", "revenue": 80000, "visitors": 5100, "conversions": 3.6, "orders": 145 }
-]
+{
+  "periods": {
+    "today": {
+      "label": "Today",
+      "dateLabel": "Wednesday, May 27 · Sunny, 84°F",
+      "trendLabel": "vs yesterday",
+      "scoopLabelSuffix": "today",
+      "kpis": {
+        "scoopsSold":   { "value": 214,  "prev": 198 },
+        "totalSales":   { "value": 1482, "prev": 1356 },
+        "ordersServed": { "value": 138,  "prev": 129 }
+      },
+      "chart": {
+        "axisLabel": "Hour",
+        "labels": ["10a", "11a", "12p", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p"],
+        "scoops": [6, 12, 24, 22, 14, 28, 32, 26, 22, 18, 10],
+        "sales":  [42, 84, 168, 154, 98, 196, 224, 182, 154, 126, 54],
+        "orders": [4, 8, 16, 15, 10, 18, 20, 17, 14, 11, 5]
+      },
+      "topFlavor": { "name": "Strawberry Hibiscus", "scoops": 48 }
+    },
+    "month": {
+      "label": "This Month",
+      "dateLabel": "May 2026 · month-to-date",
+      "trendLabel": "vs last month",
+      "scoopLabelSuffix": "this month",
+      "kpis": {
+        "scoopsSold":   { "value": 4820,  "prev": 4420 },
+        "totalSales":   { "value": 33450, "prev": 30200 },
+        "ordersServed": { "value": 3110,  "prev": 2845 }
+      },
+      "chart": {
+        "axisLabel": "Week",
+        "labels": ["Wk 1", "Wk 2", "Wk 3", "Wk 4"],
+        "scoops": [1080, 1190, 1240, 1310],
+        "sales":  [7480, 8260, 8590, 9120],
+        "orders": [690, 770, 810, 840]
+      },
+      "topFlavor": { "name": "Honey Lavender", "scoops": 1042 }
+    },
+    "ytd": {
+      "label": "Year to Date",
+      "dateLabel": "Year to date · Jan–May 2026",
+      "trendLabel": "vs prior year",
+      "scoopLabelSuffix": "YTD",
+      "kpis": {
+        "scoopsSold":   { "value": 18960,  "prev": 17500 },
+        "totalSales":   { "value": 131200, "prev": 119800 },
+        "ordersServed": { "value": 12240,  "prev": 11320 }
+      },
+      "chart": {
+        "axisLabel": "Month",
+        "labels": ["Jan", "Feb", "Mar", "Apr", "May"],
+        "scoops": [2680, 2940, 3520, 4180, 5640],
+        "sales":  [18250, 20480, 24360, 28760, 39350],
+        "orders": [1720, 1880, 2240, 2680, 3720]
+      },
+      "topFlavor": { "name": "Salted Chocolate", "scoops": 4180 }
+    }
+  },
+  "flavors": [
+    { "name": "Strawberry Hibiscus", "scoops": 48, "trend": 18 },
+    { "name": "Honey Lavender",      "scoops": 41, "trend": 9 },
+    { "name": "Salted Chocolate",    "scoops": 38, "trend": 4 },
+    { "name": "Vanilla Bean",        "scoops": 34, "trend": -3 },
+    { "name": "Matcha Coconut",      "scoops": 28, "trend": 12 }
+  ],
+  "alerts": [
+    "Pistachio Rose is low stock — under 10 scoops left.",
+    "Salted Chocolate sold out by 6:20pm.",
+    "Cone inventory low — about one busy hour remaining.",
+    "Slight waste uptick during the hottest hour (3–4pm)."
+  ],
+  "tomorrow": [
+    "Prep extra Strawberry Hibiscus for the afternoon rush.",
+    "Bring more waffle cones — ran short tonight.",
+    "Arrive 30 min earlier to catch the lunch crowd."
+  ]
+}
