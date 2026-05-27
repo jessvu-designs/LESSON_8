@@ -6,7 +6,12 @@
         <span class="brand-name">Sunny Scoops</span>
       </div>
       <div class="topbar-right">
-        <span class="topbar-date">{{ period.dateLabel }}</span>
+        <span class="topbar-date">
+          <template v-for="(part, i) in dateParts" :key="i">
+            <span v-if="i > 0"> · </span>
+            <span><span v-if="part.emoji" class="topbar-weather" aria-hidden="true">{{ part.emoji }} </span>{{ part.text }}</span>
+          </template>
+        </span>
         <v-select
           v-model="periodKey"
           :items="periodOptions"
@@ -116,7 +121,10 @@ import { ref, computed } from 'vue'
 import BarChart from '../components/BarChart.vue'
 import data from '../data/metrics.json'
 
-type PeriodKey = 'today' | 'month' | 'ytd'
+type PeriodKey =
+  | 'today' | 'month' | 'ytd'
+  | 'jan' | 'feb' | 'mar' | 'apr' | 'may' | 'jun'
+  | 'jul' | 'aug' | 'sep' | 'oct' | 'nov' | 'dec'
 type Metric = 'sales' | 'orders' | 'scoops'
 
 const periodKey = ref<PeriodKey>('today')
@@ -126,9 +134,43 @@ const periodOptions = [
   { value: 'today', label: 'Today' },
   { value: 'month', label: 'This Month' },
   { value: 'ytd',   label: 'Year to Date' },
+  { value: 'jan', label: 'January' },
+  { value: 'feb', label: 'February' },
+  { value: 'mar', label: 'March' },
+  { value: 'apr', label: 'April' },
+  { value: 'may', label: 'May' },
+  { value: 'jun', label: 'June' },
+  { value: 'jul', label: 'July' },
+  { value: 'aug', label: 'August' },
+  { value: 'sep', label: 'September' },
+  { value: 'oct', label: 'October' },
+  { value: 'nov', label: 'November' },
+  { value: 'dec', label: 'December' },
 ]
 
 const period = computed(() => data.periods[periodKey.value])
+
+const weatherEmoji = computed(() => {
+  const label = period.value.dateLabel.toLowerCase()
+  if (label.includes('thunder') || label.includes('storm')) return '⛈️'
+  if (label.includes('snow'))    return '❄️'
+  if (label.includes('rain'))    return '🌧️'
+  if (label.includes('windy'))   return '💨'
+  if (label.includes('fog'))     return '🌫️'
+  if (label.includes('partly'))  return '⛅'
+  if (label.includes('cloud'))   return '☁️'
+  if (label.includes('sunny') || label.includes('clear')) return '☀️'
+  return ''
+})
+
+const WEATHER_RE = /thunder|storm|snow|rain|windy|fog|partly|cloud|sunny|clear/i
+const dateParts = computed(() => {
+  const emoji = weatherEmoji.value
+  return period.value.dateLabel.split(' · ').map(text => ({
+    text,
+    emoji: emoji && WEATHER_RE.test(text) ? emoji : '',
+  }))
+})
 
 function pctChange(curr: number, prev: number) {
   if (!prev) return 0
@@ -224,7 +266,8 @@ function trendClass(t: number) {
 .brand-icon { color: #c63d5d; }
 .brand-name { font-weight: 600; font-size: 1rem; color: #3a2418; letter-spacing: 0.2px; }
 .topbar-right { display: flex; align-items: center; gap: 16px; }
-.topbar-date { font-size: 0.85rem; color: #8a6e5d; }
+.topbar-date { font-size: 0.85rem; color: #8a6e5d; display: inline-flex; align-items: center; gap: 6px; }
+.topbar-weather { font-size: 1rem; line-height: 1; }
 .period-filter { max-width: 160px; min-width: 140px; }
 :deep(.period-filter .v-field) {
   border-radius: 8px;

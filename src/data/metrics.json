@@ -56,6 +56,234 @@
         "orders": [1720, 1880, 2240, 2680, 3720]
       },
       "topFlavor": { "name": "Salted Chocolate", "scoops": 4180 }
+    },
+    "jan": {
+      "label": "January",
+      "dateLabel": "January 2026",
+      "trendLabel": "vs Jan last year",
+      "scoopLabelSuffix": "in January",
+      "kpis": {
+        "scoopsSold":   { "value": 2680,  "prev": 2460 },
+        "totalSales":   { "value": 18250, "prev": 16780 },
+        "ordersServed": { "value": 1720,  "prev": 1580 }
+      },
+      "chart": {
+        "axisLabel": "Week",
+        "labels": ["Wk 1", "Wk 2", "Wk 3", "Wk 4"],
+        "scoops": [620, 660, 690, 710],
+        "sales":  [4220, 4490, 4690, 4850],
+        "orders": [400, 420, 440, 460]
+      },
+      "topFlavor": { "name": "Salted Chocolate", "scoops": 612 }
+    },
+    "feb": {
+      "label": "February",
+      "dateLabel": "February 2026",
+      "trendLabel": "vs Feb last year",
+      "scoopLabelSuffix": "in February",
+      "kpis": {
+        "scoopsSold":   { "value": 2940,  "prev": 2710 },
+        "totalSales":   { "value": 20480, "prev": 18820 },
+        "ordersServed": { "value": 1880,  "prev": 1740 }
+      },
+      "chart": {
+        "axisLabel": "Week",
+        "labels": ["Wk 1", "Wk 2", "Wk 3", "Wk 4"],
+        "scoops": [680, 720, 760, 780],
+        "sales":  [4720, 5020, 5290, 5450],
+        "orders": [440, 460, 480, 500]
+      },
+      "topFlavor": { "name": "Vanilla Bean", "scoops": 684 }
+    },
+    "mar": {
+      "label": "March",
+      "dateLabel": "March 2026",
+      "trendLabel": "vs Mar last year",
+      "scoopLabelSuffix": "in March",
+      "kpis": {
+        "scoopsSold":   { "value": 3520,  "prev": 3260 },
+        "totalSales":   { "value": 24360, "prev": 22500 },
+        "ordersServed": { "value": 2240,  "prev": 2070 }
+      },
+      "chart": {
+        "axisLabel": "Week",
+        "labels": ["Wk 1", "Wk 2", "Wk 3", "Wk 4"],
+        "scoops": [820, 860, 900, 940],
+        "sales":  [5680, 5960, 6230, 6490],
+        "orders": [520, 550, 580, 590]
+      },
+      "topFlavor": { "name": "Honey Lavender", "scoops": 798 }
+    },
+    "apr": {
+      "label": "April",
+      "dateLabel": "April 2026",
+      "trendLabel": "vs Apr last year",
+      "scoopLabelSuffix": "in April",
+      "kpis": {
+        "scoopsSold":   { "value": 4180,  "prev": 3860 },
+        "totalSales":   { "value": 28760, "prev": 26540 },
+        "ordersServed": { "value": 2680,  "prev": 2480 }
+      },
+      "chart": {
+        "axisLabel": "Week",
+        "labels": ["Wk 1", "Wk 2", "Wk 3", "Wk 4"],
+        "scoops": [960, 1020, 1080, 1120],
+        "sales":  [6620, 7020, 7430, 7690],
+        "orders": [620, 660, 690, 710]
+      },
+      "topFlavor": { "name": "Matcha Coconut", "scoops": 902 }
+    },
+    "may": {
+      "label": "May",
+      "dateLabel": "May 2026",
+      "trendLabel": "vs May last year",
+      "scoopLabelSuffix": "in May",
+      "kpis": {
+        "scoopsSold":   { "value": 5640,  "prev": 5180 },
+        "totalSales":   { "value": 39350, "prev": 36100 },
+        "ordersServed": { "value": 3620,  "prev": 3320 }
+      },
+      "chart": {
+        "axisLabel": "Week",
+        "labels": ["Wk 1", "Wk 2", "Wk 3", "Wk 4"],
+        "scoops": [1320, 1380, 1450, 1490],
+        "sales":  [9210, 9620, 10110, 10410],
+        "orders": [850, 890, 930, 950]
+      },
+      "topFlavor": { "name": "Strawberry Hibiscus", "scoops": 1180 }
+    },
+    "jun": {
+      "label": "June",
+      "dateLabel": "June 2026",
+      "trendLabel": "vs Jun last year",
+      "scoopLabelSuffix": "in June",
+      "kpis": {
+        "scoopsSold":   { "value": 7200,  "prev": 6620 },
+        "totalSales":   { "value": 50400, "prev": 46340 },
+        "ordersServed": { "value": 4620,  "prev": 4240 }
+      },
+      "chart": {
+        "axisLabel": "Week",
+        "labels": ["Wk 1", "Wk 2", "Wk 3", "Wk 4"],
+        "scoops": [1700, 1780, 1850, 1870],
+        "sales":  [11900, 12460, 12940, 13100],
+        "orders": [1090, 1140, 1190, 1200]
+      },
+      "topFlavor": { "name": "Strawberry Hibiscus", "scoops": 1540 }
+    },
+    "jul": {
+      "label": "July",
+      "dateLabel": "July 2026",
+      "trendLabel": "vs Jul last year",
+      "scoopLabelSuffix": "in July",
+      "kpis": {
+        "scoopsSold":   { "value": 8400,  "prev": 7720 },
+        "totalSales":   { "value": 58800, "prev": 54040 },
+        "ordersServed": { "value": 5390,  "prev": 4950 }
+      },
+      "chart": {
+        "axisLabel": "Week",
+        "labels": ["Wk 1", "Wk 2", "Wk 3", "Wk 4"],
+        "scoops": [2000, 2080, 2150, 2170],
+        "sales":  [14000, 14560, 15050, 15190],
+        "orders": [1290, 1330, 1380, 1390]
+      },
+      "topFlavor": { "name": "Strawberry Hibiscus", "scoops": 1820 }
+    },
+    "aug": {
+      "label": "August",
+      "dateLabel": "August 2026",
+      "trendLabel": "vs Aug last year",
+      "scoopLabelSuffix": "in August",
+      "kpis": {
+        "scoopsSold":   { "value": 8100,  "prev": 7460 },
+        "totalSales":   { "value": 56700, "prev": 52220 },
+        "ordersServed": { "value": 5200,  "prev": 4780 }
+      },
+      "chart": {
+        "axisLabel": "Week",
+        "labels": ["Wk 1", "Wk 2", "Wk 3", "Wk 4"],
+        "scoops": [1940, 2010, 2070, 2080],
+        "sales":  [13580, 14070, 14490, 14560],
+        "orders": [1250, 1290, 1330, 1330]
+      },
+      "topFlavor": { "name": "Pistachio Rose", "scoops": 1690 }
+    },
+    "sep": {
+      "label": "September",
+      "dateLabel": "September 2026",
+      "trendLabel": "vs Sep last year",
+      "scoopLabelSuffix": "in September",
+      "kpis": {
+        "scoopsSold":   { "value": 6200,  "prev": 5740 },
+        "totalSales":   { "value": 43400, "prev": 40180 },
+        "ordersServed": { "value": 3980,  "prev": 3680 }
+      },
+      "chart": {
+        "axisLabel": "Week",
+        "labels": ["Wk 1", "Wk 2", "Wk 3", "Wk 4"],
+        "scoops": [1500, 1560, 1570, 1570],
+        "sales":  [10500, 10920, 10990, 10990],
+        "orders": [970, 1000, 1010, 1000]
+      },
+      "topFlavor": { "name": "Salted Chocolate", "scoops": 1320 }
+    },
+    "oct": {
+      "label": "October",
+      "dateLabel": "October 2026",
+      "trendLabel": "vs Oct last year",
+      "scoopLabelSuffix": "in October",
+      "kpis": {
+        "scoopsSold":   { "value": 4500,  "prev": 4180 },
+        "totalSales":   { "value": 31500, "prev": 29260 },
+        "ordersServed": { "value": 2890,  "prev": 2680 }
+      },
+      "chart": {
+        "axisLabel": "Week",
+        "labels": ["Wk 1", "Wk 2", "Wk 3", "Wk 4"],
+        "scoops": [1080, 1120, 1140, 1160],
+        "sales":  [7560, 7840, 7980, 8120],
+        "orders": [690, 720, 740, 740]
+      },
+      "topFlavor": { "name": "Pumpkin Spice", "scoops": 980 }
+    },
+    "nov": {
+      "label": "November",
+      "dateLabel": "November 2026",
+      "trendLabel": "vs Nov last year",
+      "scoopLabelSuffix": "in November",
+      "kpis": {
+        "scoopsSold":   { "value": 3300,  "prev": 3060 },
+        "totalSales":   { "value": 23100, "prev": 21400 },
+        "ordersServed": { "value": 2120,  "prev": 1960 }
+      },
+      "chart": {
+        "axisLabel": "Week",
+        "labels": ["Wk 1", "Wk 2", "Wk 3", "Wk 4"],
+        "scoops": [790, 820, 840, 850],
+        "sales":  [5530, 5740, 5880, 5950],
+        "orders": [510, 530, 540, 540]
+      },
+      "topFlavor": { "name": "Cinnamon Pecan", "scoops": 740 }
+    },
+    "dec": {
+      "label": "December",
+      "dateLabel": "December 2026",
+      "trendLabel": "vs Dec last year",
+      "scoopLabelSuffix": "in December",
+      "kpis": {
+        "scoopsSold":   { "value": 3000,  "prev": 2780 },
+        "totalSales":   { "value": 21000, "prev": 19460 },
+        "ordersServed": { "value": 1920,  "prev": 1780 }
+      },
+      "chart": {
+        "axisLabel": "Week",
+        "labels": ["Wk 1", "Wk 2", "Wk 3", "Wk 4"],
+        "scoops": [720, 750, 770, 760],
+        "sales":  [5040, 5250, 5390, 5320],
+        "orders": [460, 480, 490, 490]
+      },
+      "topFlavor": { "name": "Peppermint Bark", "scoops": 680 }
     }
   },
   "flavors": [
