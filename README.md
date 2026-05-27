@@ -2,9 +2,7 @@
 
 A small, story-driven sales dashboard for an artisanal ice cream cart business.
 
-This project is **not** a generic admin or SaaS analytics template. It is intentionally
-narrow, warm, and operational: a single screen the cart owner can glance at after a
-shift (or partway through one) to understand how the day went and what to do next.
+This project is intentionally narrow, warm, and operational: a single screen the cart owner can glance at after a shift (or partway through one) to understand how the day went and what to do next.
 
 ---
 

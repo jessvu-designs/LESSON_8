@@ -271,10 +271,9 @@ function trendClass(t: number) {
   text-align: center;
 }
 .kpi-trend--muted { color: #8a6e5d; font-weight: 400; }
-panel-sub {
+.panel-sub {
   font-size: 0.8rem; color: #8a6e5d; margin-top: 4px;
 }
-.
 .text-up   { color: #2e8a5f; }
 .text-down { color: #b54a3b; }
 .text-flat { color: #8a6e5d; }
